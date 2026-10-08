@@ -77,43 +77,63 @@ public class BankAccount implements  Cloneable {
     }
 
 
-    public static  class AccountBuilder {
-        private BankAccount bankAccount = new BankAccount();
+    public static class AccountBuilder {
+        private Long accountId;
+        private double balance;
+        private String currency;
+        private AccountType type;
+        private AccountStatus status;
+        private Customer customer;
 
-        public  AccountBuilder accountId(Long id){
-            bankAccount.accountId = id;
+        public AccountBuilder accountId(Long id) {
+            this.accountId = id;
             return this;
         }
-        public  AccountBuilder currency(String currency){
-            bankAccount.currency = currency;
+
+        public AccountBuilder currency(String currency) {
+            this.currency = currency;
             return this;
         }
-        public  AccountBuilder balance(double balance){
+
+        public AccountBuilder balance(double balance) {
+            this.balance = balance;
+            return this;
+        }
+
+        public AccountBuilder type(AccountType type) {
+            this.type = type;
+            return this;
+        }
+
+        public AccountBuilder status(AccountStatus status) {
+            this.status = status;
+            return this;
+        }
+
+        public AccountBuilder customer(Customer customer) {
+            this.customer = customer;
+            return this;
+        }
+
+        // a new instance on every call, so a builder can be reused safely
+        public BankAccount build() {
+            BankAccount bankAccount = new BankAccount();
+            bankAccount.accountId = accountId;
             bankAccount.balance = balance;
-            return this;
-        }
-        public  AccountBuilder type(AccountType type){
+            bankAccount.currency = currency;
             bankAccount.type = type;
-            return this;
-        }
-        public  AccountBuilder status(AccountStatus status){
-
             bankAccount.status = status;
-            return this;
+            bankAccount.customer = customer;
+            return bankAccount;
         }
-
-        public  BankAccount build(){
-            return this.bankAccount;
-        }
-
-}
+    }
 
     @Override
     public BankAccount clone() throws CloneNotSupportedException {
         BankAccount bankAccount = (BankAccount) super.clone();
-        bankAccount.setCustomer(this.customer.clone());
+        if (this.customer != null) {
+            bankAccount.setCustomer(this.customer.clone());
+        }
         return bankAccount;
     }
 }
-
-
